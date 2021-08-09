@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>335503231849-4fs4a1l9q71cs1g2kin0ce30dd3l782k.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.335503231849-4fs4a1l9q71cs1g2kin0ce30dd3l782k</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAxjdMn3BmNYGiHNG9brb1piklN362vDo4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>335503231849</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.codecademy.FirebaseTestProject</string>
+	<key>PROJECT_ID</key>
+	<string>instacademy-test1</string>
+	<key>STORAGE_BUCKET</key>
+	<string>instacademy-test1.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:335503231849:ios:9110b37b356e9bba310bf8</string>
+</dict>
+</plist>
