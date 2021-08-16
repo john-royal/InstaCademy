@@ -10,13 +10,14 @@ import SwiftUI
 struct MainTabView: View {
     var body: some View {
         TabView {
-            PostsList()
+            PostsList(postData: PostData(dataType: .all))
                 .tabItem {
                     Label("Posts", systemImage: "list.dash")
                 }
-            NewPostForm()
+            PostsList(postData: PostData(dataType: .favorites))
                 .tabItem {
-                    Label("New Post", systemImage: "plus.circle")
+                    Label("Favorites",
+                    systemImage: "heart.fill")
                 }
         }
     }
