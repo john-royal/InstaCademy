@@ -10,15 +10,19 @@ import SwiftUI
 struct NewPostForm: View {
     @State var postContent = ""
     @State var title = ""
+    @State var author = ""
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         Form {
             TextField("Title", text: $title)
             TextField("Post content", text: $postContent)
+            TextField("Author", text: $author)
             Button("Submit") {
                 Task {
                     do {
-                        try await PostService.upload(Post(title: title, text: postContent, author: "Add Auth"))
+                        try await PostService.upload(post: Post(title: title, text: postContent, author: author))
+                        presentationMode.wrappedValue.dismiss()
                     }
                     catch {
                         print(error)
