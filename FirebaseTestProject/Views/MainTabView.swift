@@ -20,7 +20,7 @@ struct MainTabView: View {
     
     private func authenticatedView(_ user: User) -> some View {
         TabView {
-            PostsList()
+            PostsList(postData: .init(user: user))
                 .tabItem {
                     Label("Posts", systemImage: "list.dash")
                 }

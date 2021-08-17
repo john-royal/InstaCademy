@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Post: Identifiable, FirebaseConvertable {
+struct Post: Identifiable, Equatable, FirebaseConvertable {
     let title: String
     let text: String
     let author: User
