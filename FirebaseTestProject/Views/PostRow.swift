@@ -12,13 +12,13 @@ struct PostRow: View {
     var body: some View {
         VStack {
             Text(post.title)
-                .font(.largeTitle)
-                .padding()
+                .font(.title)
+                .padding(.bottom, 8)
             Text(post.text)
                 .font(.body)
-                .padding()
+                .padding(.bottom, 8)
             Text(post.author)
-                .padding()
+                .padding(.bottom, 8)
         }
     }
 }
