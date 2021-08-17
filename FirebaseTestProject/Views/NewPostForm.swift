@@ -10,6 +10,7 @@ import SwiftUI
 struct NewPostForm: View {
     @State var postContent = ""
     @State var title = ""
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     var body: some View {
         Form {
@@ -18,7 +19,7 @@ struct NewPostForm: View {
             Button("Submit") {
                 Task {
                     do {
-                        try await PostService.upload(Post(title: title, text: postContent, author: "Add Auth"))
+                        try await PostService.upload(Post(title: title, text: postContent, author: authViewModel.getUser()))
                     }
                     catch {
                         print(error)

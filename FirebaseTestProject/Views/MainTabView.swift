@@ -21,6 +21,10 @@ struct MainTabView: View {
                     .tabItem {
                         Label("New Post", systemImage: "plus.circle")
                     }
+                ProfileView()
+                    .tabItem {
+                        Label("Profile", systemImage: "gear")
+                    }
             }
         } else {
             SignInView()
