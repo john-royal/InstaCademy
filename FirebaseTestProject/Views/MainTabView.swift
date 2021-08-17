@@ -8,16 +8,22 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    
     var body: some View {
-        TabView {
-            PostsList()
-                .tabItem {
-                    Label("Posts", systemImage: "list.dash")
-                }
-            NewPostForm()
-                .tabItem {
-                    Label("New Post", systemImage: "plus.circle")
-                }
+        if authViewModel.userSignedIn {
+            TabView {
+                PostsList()
+                    .tabItem {
+                        Label("Posts", systemImage: "list.dash")
+                    }
+                NewPostForm()
+                    .tabItem {
+                        Label("New Post", systemImage: "plus.circle")
+                    }
+            }
+        } else {
+            SignInView()
         }
     }
 }
@@ -25,5 +31,6 @@ struct MainTabView: View {
 struct MainTabView_Previews: PreviewProvider {
     static var previews: some View {
         MainTabView()
+            .environmentObject(AuthViewModel())
     }
 }
