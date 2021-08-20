@@ -13,13 +13,15 @@ struct Post: FirebaseConvertable {
     let author: String
     let text: String
     let id: UUID
+    var imageURL: String
     let timestamp: Date
     
-    init(title: String, text: String, author: String) {
+    init(title: String, text: String, author: String, imageURL: String = "no image") {
         self.title = title
         self.author = author
         self.text = text
         self.id = UUID()
+        self.imageURL = imageURL
         self.timestamp = Date()
     }
     static let testPost = Post(title: "Title", text: "Content", author: "First Last")
