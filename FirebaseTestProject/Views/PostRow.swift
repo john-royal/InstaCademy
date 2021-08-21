@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PostRow: View {
     let post: Post
+    
     var body: some View {
         VStack {
             Text(post.title)
@@ -19,6 +20,7 @@ struct PostRow: View {
                 .padding(.bottom, 8)
             Text(post.author)
                 .padding(.bottom, 8)
+            NavigationLink("Comments", destination: CommentsList.Presenter(post: post))
         }
     }
 }
