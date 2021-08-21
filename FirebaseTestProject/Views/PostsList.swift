@@ -11,8 +11,12 @@ struct PostsList: View {
     @StateObject var postData = PostData()
     
     var body: some View {
+        //Searchable Posts
+        SearchBar(text: $searchText)
+        let posts = searchText == "" ? postData.posts : postData.posts.filter({ $0.contains(searchText) })
+        
         NavigationView {
-            List(postData.posts, id: \.text) { post in
+            List(posts, id: \.text) { post in
                 PostRow(post: post)
             }
             .refreshable {
