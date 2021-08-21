@@ -12,7 +12,7 @@ struct PostsList: View {
     
     var body: some View {
         NavigationView {
-            List(postData.posts, id: \.text) { post in
+            List(postData.posts) { post in
                 PostRow(post: post)
             }
             .refreshable {
