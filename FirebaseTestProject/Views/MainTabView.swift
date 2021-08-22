@@ -8,17 +8,16 @@
 import SwiftUI
 
 struct MainTabView: View {
+    @StateObject var postData: PostData = PostData()
+    
     var body: some View {
         TabView {
             PostsList()
                 .tabItem {
                     Label("Posts", systemImage: "list.dash")
                 }
-            NewPostForm()
-                .tabItem {
-                    Label("New Post", systemImage: "plus.circle")
-                }
         }
+        .environmentObject(postData)
     }
 }
 
