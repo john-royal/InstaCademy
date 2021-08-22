@@ -23,14 +23,6 @@ struct PostsList: View {
                             ForEach(posts, id: \.id) { post in
                                 PostRow(post: binding(for: post), deletePostAction: { post in
                                     postData.remove(post: post)
-                                }, isFavoriteAction: { post in
-                                    if post.isFavorite {
-                                        postData.favorites.append(post)
-                                    }
-                                    else {
-                                        guard let index = postData.favorites.firstIndex(where: { $0.id == post.id }) else { return }
-                                        postData.favorites.remove(at: index)
-                                    }
                                 })
                             }
                         }
