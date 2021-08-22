@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: FirebaseConvertable {
+struct User: Equatable, FirebaseConvertable {
     let id: UUID
     var name: String
     
