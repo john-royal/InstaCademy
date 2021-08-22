@@ -23,6 +23,39 @@ struct Post: FirebaseConvertable {
         self.timestamp = Date()
     }
     static let testPost = Post(title: "Title", text: "Content", author: "First Last")
+    
+    func contains(_ str:String) -> Bool {
+        // Probably Works -- VERY ARBITRARY (works for any keys)
+        let stringValues = self.jsonDict.values.map { val -> String in
+            if let value = val as? String {
+                return value
+            }
+            // We don't want to search on ANY UUIDs
+            if let value = val as? UUID {
+                return ""
+            }
+            if let value = val as? Date {
+                return DateFormatter.postFormat(date: value).lowercased()
+            }
+            return ""
+        }
+        
+        
+        let filteredStrings = stringValues.filter({ $0 != "" && $0.contains(str.lowercased()) })
+        
+        return filteredStrings.count > 0
+        
+        // Definitely works - VERY SPECIFIC in keys
+//        let lowercaseString = str.lowercased()
+//        let lowercaseTitle = title.lowercased()
+//        let lowercaseAuthor = author.lowercased()
+//        let lowercaseText = text.lowercased()
+//        let lowercaseDate = DateFormatter.postFormat(date: timestamp).lowercased()
+//        return  lowercaseTitle.contains(lowercaseString) ||
+//                lowercaseAuthor.contains(lowercaseString) ||
+//                lowercaseText.contains(lowercaseString) ||
+//                lowercaseDate.contains(lowercaseString)
+    }
 }
 
 protocol FirebaseConvertable: Codable {
@@ -57,5 +90,14 @@ struct PostService {
     
     static func upload(_ post: Post) async throws {
         try await postsReference.document(post.id.uuidString).setData(post.jsonDict)
+    }
+}
+
+
+extension DateFormatter {
+    static func postFormat(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM y"
+        return formatter.string(from: date)
     }
 }
