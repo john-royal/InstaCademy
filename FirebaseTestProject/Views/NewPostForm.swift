@@ -11,7 +11,6 @@ struct NewPostForm: View {
     @State var postContent = ""
     @State var title = ""
     @FocusState private var showingKeyboard: Bool
-    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         Form {
@@ -28,7 +27,6 @@ struct NewPostForm: View {
                     catch {
                         print(error)
                     }
-                    dismiss()
                 }
             }
         }
