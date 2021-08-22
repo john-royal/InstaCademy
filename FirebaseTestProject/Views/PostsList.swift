@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PostsList: View {
     @StateObject var postData = PostData()
+    @State private var searchText: String = ""
     
     var body: some View {
         //Searchable Posts
