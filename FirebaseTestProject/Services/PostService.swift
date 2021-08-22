@@ -40,16 +40,40 @@ extension PostService {
         }
         let post = postsReference.document(post.id.uuidString)
         let comments = post.collection("comments")
-        comments.addDocument(data: comment.jsonDict)
+        try await comments.document(comment.id.uuidString).setData(comment.jsonDict)
+    }
+    
+    static func removeComment(_ comment: Comment, from post: Post, user: User) async throws {
+        guard [comment.author.id, post.author.id].contains(user.id) else {
+            throw CommentError.notAllowedToDelete
+        }
+        let post = postsReference.document(post.id.uuidString)
+        let comment = post.collection("comments").document(comment.id.uuidString)
+        try await comment.delete()
     }
     
     enum CommentError: LocalizedError {
-        case exceedsCharacterLimit
+        case exceedsCharacterLimit, notAllowedToDelete, unknown
         
         var errorDescription: String? {
             switch self {
             case .exceedsCharacterLimit:
+                return "Cannot Post Comment"
+            case .notAllowedToDelete:
+                return "Cannot Delete Comment"
+            case .unknown:
+                return "Error"
+            }
+        }
+        
+        var failureReason: String? {
+            switch self {
+            case .exceedsCharacterLimit:
                 return "Your comment has more than \(COMMENT_CHARACTER_LIMIT) characters."
+            case .notAllowedToDelete:
+                return "You are not the author of this comment or post."
+            case .unknown:
+                return "Sorry, something went wrong."
             }
         }
     }

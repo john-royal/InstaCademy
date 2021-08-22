@@ -12,9 +12,10 @@ import SwiftUI
 struct CommentsList: View {
     let comments: [Comment]
     let submitAction: (String) async throws -> Void
+    let deleteAction: (Comment) async throws -> Void
     
     @State private var comment = ""
-    @State private var error: Error?
+    @State private var error: PostService.CommentError?
     @State private var isError = false
     @State private var isLoading = false
     
@@ -23,13 +24,14 @@ struct CommentsList: View {
             if comments.isEmpty {
                 emptyState
             } else {
-                List(comments) {
-                    CommentRow(comment: $0)
-                }
+                commentsList
             }
         }
         .navigationTitle("Comments")
         .navigationBarTitleDisplayMode(.inline)
+        .alert(isPresented: $isError, error: error, actions: { _ in }) { error in
+            Text(error.failureReason ?? "Sorry, something went wrong.")
+        }
         .toolbar {
             ToolbarItem(placement: .bottomBar) {
                 newCommentForm
@@ -48,37 +50,63 @@ struct CommentsList: View {
         }
     }
     
+    private var commentsList: some View {
+        List {
+            ForEach(comments) {
+                CommentRow(comment: $0)
+            }
+            .onDelete(perform: handleDelete(indexSet:))
+        }
+    }
+    
     private var newCommentForm: some View {
         HStack {
             TextField("Comment", text: $comment)
             if isLoading {
                 ProgressView()
             } else {
-                Button(action: submitComment) {
+                Button(action: handleSubmit) {
                     Label("Post", systemImage: "paperplane")
                 }
                 .disabled(comment.isEmpty)
             }
         }
         .disabled(isLoading)
-        .onSubmit(submitComment)
-        .alert("Cannot Post Comment", isPresented: $isError, presenting: error, actions: { _ in }) { error in
-            Text(error.localizedDescription)
-        }
+        .onSubmit(handleSubmit)
     }
     
-    private func submitComment() {
+    private func handleSubmit() {
         Task {
             isLoading = true
             do {
                 try await submitAction(comment)
                 comment = ""
             } catch {
-                self.error = error
-                isError = true
+                handleError(error)
             }
             isLoading = false
         }
+    }
+    
+    private func handleDelete(indexSet: IndexSet) {
+        Task {
+            do {
+                for index in indexSet {
+                    try await deleteAction(comments[index])
+                }
+            } catch {
+                handleError(error)
+            }
+        }
+    }
+    
+    private func handleError<E: Error>(_ error: E) {
+        if let error = error as? PostService.CommentError {
+            self.error = error
+        } else {
+            self.error = .unknown
+        }
+        isError = true
     }
 }
 
@@ -93,7 +121,7 @@ extension CommentsList {
         
         var body: some View {
             if didLoadComments {
-                CommentsList(comments: comments, submitAction: submitComment(content:))
+                CommentsList(comments: comments, submitAction: submitComment(content:), deleteAction: deleteComment(_:))
             } else {
                 ProgressView()
                     .navigationTitle("Comments")
@@ -111,12 +139,20 @@ extension CommentsList {
         }
         
         private func submitComment(content: String) async throws {
-            guard let author = userService.user else {
+            guard let user = userService.user else {
                 preconditionFailure("Cannot submit comment without a signed-in user")
             }
-            let comment = Comment(author: author, content: content)
+            let comment = Comment(author: user, content: content)
             try await PostService.addComment(comment, to: post)
             comments.append(comment)
+        }
+        
+        private func deleteComment(_ comment: Comment) async throws {
+            guard let user = userService.user else {
+                preconditionFailure("Cannot delete comment without a signed-in user")
+            }
+            try await PostService.removeComment(comment, from: post, user: user)
+            comments.removeAll { $0 == comment }
         }
     }
 }
@@ -128,13 +164,17 @@ struct CommentsList_Previews: PreviewProvider {
         @State private var comments: [Comment] = []
         
         var body: some View {
-            CommentsList(comments: comments, submitAction: handleSubmit(_:))
+            CommentsList(comments: comments, submitAction: handleSubmit(_:), deleteAction: handleDelete(_:))
         }
         
         private func handleSubmit(_ content: String) async {
             await timeout(.seconds(1))
             let comment = Comment(author: .init(name: "Jane Doe"), content: content)
             comments.append(comment)
+        }
+        
+        private func handleDelete(_ comment: Comment) async throws {
+            comments.removeAll { $0 == comment }
         }
         
         private func timeout(_ timeout: DispatchTimeInterval) async {
