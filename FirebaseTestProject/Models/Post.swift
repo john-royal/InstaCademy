@@ -23,6 +23,40 @@ struct Post: FirebaseConvertable {
         self.timestamp = Date()
     }
     static let testPost = Post(title: "Title", text: "Content", author: "First Last")
+    
+    func contains(_ str:String) -> Bool {
+        // Not 100% sure works -- "generic" (we still have to do a specific if-case for each type) functionality for not requiring specific property names
+        // as in the case commented below
+        let stringValues = self.jsonDict.values.map { val -> String in
+            if let value = val as? String {
+                return value
+            }
+            // We don't want to search on ANY UUIDs
+            if let _ = val as? UUID {
+                return ""
+            }
+            if let value = val as? Date {
+                return DateFormatter.postFormat(date: value).lowercased()
+            }
+            return ""
+        }
+        
+        
+        let filteredStrings = stringValues.filter({ $0 != "" && $0.contains(str.lowercased()) })
+        
+        return filteredStrings.count > 0
+        
+        // 100% sure works with the specific properties
+//        let lowercaseString = str.lowercased()
+//        let lowercaseTitle = title.lowercased()
+//        let lowercaseAuthor = author.lowercased()
+//        let lowercaseText = text.lowercased()
+//        let lowercaseDate = DateFormatter.postFormat(date: timestamp).lowercased()
+//        return  lowercaseTitle.contains(lowercaseString) ||
+//                lowercaseAuthor.contains(lowercaseString) ||
+//                lowercaseText.contains(lowercaseString) ||
+//                lowercaseDate.contains(lowercaseString)
+    }
 }
 
 protocol FirebaseConvertable: Codable {
@@ -57,5 +91,17 @@ struct PostService {
     
     static func upload(_ post: Post) async throws {
         try await postsReference.document(post.id.uuidString).setData(post.jsonDict)
+    }
+    
+    static func delete(post: Post) async throws {
+        try await postsReference.document(post.id.uuidString).delete()
+    }
+}
+
+extension DateFormatter {
+    static func postFormat(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "d MMM y"
+        return formatter.string(from: date)
     }
 }
