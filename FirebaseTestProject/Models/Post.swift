@@ -9,10 +9,18 @@ import Foundation
 
 struct Post: Identifiable, FirebaseConvertable {
     let title: String
-    let author: User
     let text: String
+    let author: User
     let id: UUID
     let timestamp: Date
+    
+    init(title: String, text: String, author: User, id: UUID = .init(), timestamp: Date = .init()) {
+        self.title = title
+        self.text = text
+        self.author = author
+        self.id = id
+        self.timestamp = timestamp
+    }
 }
 
 extension Post {
