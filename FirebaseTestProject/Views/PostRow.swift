@@ -17,7 +17,7 @@ struct PostRow: View {
             Text(post.text)
                 .font(.body)
                 .padding(.bottom, 8)
-            Text(post.author)
+            Text(post.author.name)
                 .padding(.bottom, 8)
         }
     }

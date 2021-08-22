@@ -11,7 +11,7 @@ import FirebaseFirestore
 struct PostService {
     static var postsReference: CollectionReference {
         let db = Firestore.firestore()
-        return db.collection("posts")
+        return db.collection("posts_v1")
     }
     
     static func getPosts() async throws -> [Post] {
