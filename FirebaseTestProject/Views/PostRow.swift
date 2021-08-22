@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PostRow: View {
     let post: Post
+    @EnvironmentObject var userService: UserService
     
     var body: some View {
         VStack {
@@ -20,7 +21,7 @@ struct PostRow: View {
                 .padding(.bottom, 8)
             Text(post.author.name)
                 .padding(.bottom, 8)
-            NavigationLink("Comments", destination: CommentsList.Presenter(post: post))
+            NavigationLink("Comments", destination: CommentsList(viewModel: .init(post: post, user: userService.user!)))
         }
     }
 }
@@ -28,5 +29,6 @@ struct PostRow: View {
 struct PostRow_Previews: PreviewProvider {
     static var previews: some View {
         PostRow(post: Post.testPost)
+            .environmentObject(UserService())
     }
 }

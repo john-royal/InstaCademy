@@ -15,4 +15,6 @@ struct User: Equatable, FirebaseConvertable {
         self.id = id
         self.name = name
     }
+    
+    static let preview = User(id: UUID(uuidString: "9264E796-F622-44DA-88A4-2622D6E97F2B")!, name: "Jane Doe")
 }
