@@ -25,4 +25,23 @@ import Foundation
             print(error)
         }
     }
+    
+    func index(of post: Post) -> Int? {
+        for i in posts.indices {
+            if posts[i].id == post.id {
+                return i
+            }
+        }
+        return nil
+    }
+    
+    func remove(post: Post) {
+        // Will the task stop if we exit the function, prior to deletion?
+        Task {
+            try await PostService.delete(post: post)
+        }
+        
+        guard let index = posts.firstIndex(where: { $0.id == post.id }) else { return }
+        posts.remove(at: index)
+    }
 }
