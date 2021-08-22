@@ -15,6 +15,7 @@ struct MainTabView: View {
                     Label("Posts", systemImage: "list.dash")
                 }
         }
+        .environmentObject(postData)
     }
 }
 
