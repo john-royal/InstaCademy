@@ -14,10 +14,6 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Posts", systemImage: "list.dash")
                 }
-            NewPostForm()
-                .tabItem {
-                    Label("New Post", systemImage: "plus.circle")
-                }
         }
     }
 }
