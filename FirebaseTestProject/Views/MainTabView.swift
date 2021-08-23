@@ -14,10 +14,11 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Posts", systemImage: "list.dash")
                 }
-            NewPostForm()
-                 .tabItem {
-                     Label("New Post", systemImage: "plus.circle")
-                 }
+            PostsList(viewStyle: .favorites)
+                .tabItem {
+                    Label("Favorites",
+                    systemImage: "heart.fill")
+                }
         }
     }
 }
