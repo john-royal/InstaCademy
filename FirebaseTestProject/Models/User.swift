@@ -15,4 +15,6 @@ struct User: Equatable, FirebaseConvertable {
         self.id = id
         self.name = name
     }
+    
+    static let testUser = User(name: "Jane Doe")
 }
