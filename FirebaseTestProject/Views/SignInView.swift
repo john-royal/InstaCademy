@@ -59,7 +59,7 @@ struct SignInView: View {
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
+struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
         SignInView(signInAction: { _, _ in }, signUpAction: { _, _ in })
     }
