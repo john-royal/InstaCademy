@@ -28,18 +28,20 @@ struct MainTabView: View {
                 .tabItem {
                     Label("New Post", systemImage: "plus.circle")
                 }
+            ProfileView(user: user, signOutAction: { try! userService.signOut() })
+                .tabItem {
+                    Label("Profile", systemImage: "gear")
+                }
         }
         .environment(\.user, user)
     }
     
     private var unauthenticatedView: some View {
-        // TODO: Replace this with Tim’s authentication UI. This is a placeholder to facilitate the development of comments, which rely on there being an authenticated user.
-        ProgressView()
-            .onAppear {
-                Task {
-                    try! await userService.signIn(email: "A21-4@testuser.com", password: "password")
-                }
-            }
+        SignInView(signInAction: { email, password in
+            try! await userService.signIn(email: email, password: password)
+        }, signUpAction: { email, password in
+            try! await userService.createAccount(name: "", email: email, password: password)
+        })
     }
 }
 
