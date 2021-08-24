@@ -44,7 +44,7 @@ struct MainTabView: View {
 }
 
 struct UserEnvironmentKey: EnvironmentKey {
-    static let defaultValue = User.preview
+    static let defaultValue = User.testUser
 }
 
 extension EnvironmentValues {
