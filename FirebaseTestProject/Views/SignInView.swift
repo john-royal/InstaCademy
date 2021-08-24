@@ -8,11 +8,15 @@
 import SwiftUI
 
 struct SignInView<CreateAccountView: View>: View {
-    let action: (String, String) async -> Void
+    let action: (String, String) async throws -> Void
     let createAccountView: CreateAccountView
     
     @State private var email = ""
     @State private var password = ""
+    @State private var error: Error? {
+        didSet { hasError = error != nil }
+    }
+    @State private var hasError = false
     
     var body: some View {
         NavigationView {
@@ -33,14 +37,7 @@ struct SignInView<CreateAccountView: View>: View {
                         .cornerRadius(15)
                         .textContentType(.newPassword)
                     HStack {
-                        Button {
-                            guard !email.isEmpty, !password.isEmpty else {
-                                return
-                            }
-                            Task {
-                                await action(email, password)
-                            }
-                        } label: {
+                        Button(action: signIn) {
                             Text("Sign In")
                                 .foregroundColor(Color.white)
                                 .frame(width: 150, height: 50)
@@ -58,6 +55,20 @@ struct SignInView<CreateAccountView: View>: View {
                 Spacer()
             }
             .onSubmit(signIn)
+        }
+        .alert("Cannot Sign In", isPresented: $hasError, presenting: error, actions: { _ in }) { error in
+            Text(error.localizedDescription)
+        }
+    }
+    
+    private func signIn() {
+        Task {
+            do {
+                try await action(email, password)
+            } catch {
+                print("[SignInView] Cannot sign in: \(error.localizedDescription)")
+                self.error = error
+            }
         }
     }
 }

@@ -28,7 +28,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("New Post", systemImage: "plus.circle")
                 }
-            ProfileView(user: user, signOutAction: { try! userService.signOut() })
+            ProfileView(user: user, signOutAction: userService.signOut)
                 .tabItem {
                     Label("Profile", systemImage: "gear")
                 }
@@ -38,12 +38,8 @@ struct MainTabView: View {
     
     private var unauthenticatedView: some View {
         SignInView(
-            action: { email, password in
-                try! await userService.signIn(email: email, password: password)
-            },
-            createAccountView: SignUpView(action: { name, email, password in
-                try! await userService.createAccount(name: name, email: email, password: password)
-            })
+            action: userService.signIn(email:password:),
+            createAccountView: SignUpView(action: userService.createAccount(name:email:password:))
         )
     }
 }

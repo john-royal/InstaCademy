@@ -9,7 +9,12 @@ import SwiftUI
 
 struct ProfileView: View {
     let user: User
-    let signOutAction: () -> Void
+    let signOutAction: () async throws -> Void
+    
+    @State private var error: Error? {
+        didSet { hasError = error != nil }
+    }
+    @State private var hasError = false
     
     var body: some View {
         VStack{
@@ -28,7 +33,7 @@ struct ProfileView: View {
                 .font(.title2)
                 .bold()
             Spacer()
-            Button(action: signOutAction) {
+            Button(action: signOut) {
                 Text("Sign Out")
                     .foregroundColor(Color.white)
                     .frame(width: 150, height: 50)
@@ -36,6 +41,20 @@ struct ProfileView: View {
                     .cornerRadius(15)
             }
             Spacer()
+        }
+        .alert("Cannot Sign Out", isPresented: $hasError, presenting: error, actions: { _ in }) { error in
+            Text(error.localizedDescription)
+        }
+    }
+    
+    private func signOut() {
+        Task {
+            do {
+                try await signOutAction()
+            } catch {
+                print("[ProfileView] Cannot sign out: \(error.localizedDescription)")
+                self.error = error
+            }
         }
     }
 }
