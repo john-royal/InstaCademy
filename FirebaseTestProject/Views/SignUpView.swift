@@ -25,14 +25,17 @@ struct SignUpView: View {
                     .padding()
                     .background(Color.secondary)
                     .cornerRadius(15)
+                    .textContentType(.name)
                 TextField("Email Address", text: $email)
                     .padding()
                     .background(Color.secondary)
                     .cornerRadius(15)
+                    .textContentType(.emailAddress)
                 SecureField("Password", text: $password)
                     .padding()
                     .background(Color.secondary)
                     .cornerRadius(15)
+                    .textContentType(.password)
                 Button {
                     Task {
                         await action(name, email, password)
@@ -48,6 +51,7 @@ struct SignUpView: View {
             .padding()
             Spacer()
         }
+        .onSubmit(createAccount)
     }
 }
 

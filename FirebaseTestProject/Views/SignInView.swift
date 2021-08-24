@@ -26,10 +26,12 @@ struct SignInView<CreateAccountView: View>: View {
                         .padding()
                         .background(Color.secondary)
                         .cornerRadius(15)
+                        .textContentType(.emailAddress)
                     SecureField("Password", text: $password)
                         .padding()
                         .background(Color.secondary)
                         .cornerRadius(15)
+                        .textContentType(.newPassword)
                     HStack {
                         Button {
                             guard !email.isEmpty, !password.isEmpty else {
@@ -55,6 +57,7 @@ struct SignInView<CreateAccountView: View>: View {
                 .padding()
                 Spacer()
             }
+            .onSubmit(signIn)
         }
     }
 }
