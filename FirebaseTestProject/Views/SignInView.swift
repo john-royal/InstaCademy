@@ -1,6 +1,6 @@
 //
-//  LoginView.swift
-//  LoginView
+//  SignInView.swift
+//  SignInView
 //
 //  Created by Tim Miller on 8/12/21.
 //

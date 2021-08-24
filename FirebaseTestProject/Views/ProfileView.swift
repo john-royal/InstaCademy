@@ -1,6 +1,6 @@
 //
-//  SignOutView.swift
-//  SignOutView
+//  ProfileView.swift
+//  ProfileView
 //
 //  Created by Tim Miller on 8/12/21.
 //
