@@ -41,8 +41,8 @@ struct MainTabView: View {
             action: { email, password in
                 try! await userService.signIn(email: email, password: password)
             },
-            createAccountView: SignUpView(action: { email, password in
-                try! await userService.createAccount(name: "", email: email, password: password)
+            createAccountView: SignUpView(action: { name, email, password in
+                try! await userService.createAccount(name: name, email: email, password: password)
             })
         )
     }
