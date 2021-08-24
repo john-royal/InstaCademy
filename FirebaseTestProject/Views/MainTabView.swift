@@ -37,11 +37,14 @@ struct MainTabView: View {
     }
     
     private var unauthenticatedView: some View {
-        SignInView(signInAction: { email, password in
-            try! await userService.signIn(email: email, password: password)
-        }, signUpAction: { email, password in
-            try! await userService.createAccount(name: "", email: email, password: password)
-        })
+        SignInView(
+            action: { email, password in
+                try! await userService.signIn(email: email, password: password)
+            },
+            createAccountView: SignUpView(action: { email, password in
+                try! await userService.createAccount(name: "", email: email, password: password)
+            })
+        )
     }
 }
 

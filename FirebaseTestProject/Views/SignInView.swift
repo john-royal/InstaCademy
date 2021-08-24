@@ -7,9 +7,10 @@
 
 import SwiftUI
 
-struct SignInView: View {
-    let signInAction: (String, String) async -> Void
-    let signUpAction: (String, String) async -> Void
+struct SignInView<CreateAccountView: View>: View {
+    let action: (String, String) async -> Void
+    let createAccountView: CreateAccountView
+    
     @State private var email = ""
     @State private var password = ""
     
@@ -35,7 +36,7 @@ struct SignInView: View {
                                 return
                             }
                             Task {
-                                await signInAction(email, password)
+                                await action(email, password)
                             }
                         } label: {
                             Text("Sign In")
@@ -44,7 +45,7 @@ struct SignInView: View {
                                 .background(Color.blue)
                                 .cornerRadius(15)
                         }
-                        NavigationLink("Create Account", destination: SignUpView(action: signUpAction))
+                        NavigationLink("Create Account", destination: createAccountView)
                             .foregroundColor(Color.white)
                             .frame(width: 150, height: 50)
                             .background(Color.blue)
@@ -60,6 +61,6 @@ struct SignInView: View {
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
-        SignInView(signInAction: { _, _ in }, signUpAction: { _, _ in })
+        SignInView(action: { _, _ in }, createAccountView: EmptyView())
     }
 }
