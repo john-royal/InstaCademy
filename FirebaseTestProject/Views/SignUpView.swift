@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import FirebaseAuth
 
 struct SignUpView: View {
     let action: (String, String) async -> Void
