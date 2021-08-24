@@ -15,10 +15,8 @@ struct FirebaseTestProjectApp: App {
     }
     
     var body: some Scene {
-      let authViewModel = AuthViewModel()
         WindowGroup {
             MainTabView()
-                .environmentObject(authViewModel)
         }
     }
 }

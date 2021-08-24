@@ -9,11 +9,10 @@ import SwiftUI
 import FirebaseAuth
 
 struct SignInView: View {
-  
-  @State var email = ""
-  @State var password = ""
-  @EnvironmentObject var authViewModel: AuthViewModel
-  
+  let signInAction: (String, String) async -> Void
+  let signUpAction: (String, String) async -> Void
+  @State private var email = ""
+  @State private var password = ""
   
   var body: some View {
     NavigationView {
@@ -37,7 +36,7 @@ struct SignInView: View {
                 return
               }
               Task {
-                await authViewModel.signIn(email: email, password: password)
+                await signInAction(email, password)
               }
             } label: {
               Text("Sign In")
@@ -46,7 +45,7 @@ struct SignInView: View {
                 .background(Color.blue)
                 .cornerRadius(15)
             }
-            NavigationLink("Create Account", destination: SignUpView())
+              NavigationLink("Create Account", destination: SignUpView(action: signUpAction))
               .foregroundColor(Color.white)
               .frame(width: 150, height: 50)
               .background(Color.blue)
@@ -62,6 +61,6 @@ struct SignInView: View {
 
 struct LoginView_Previews: PreviewProvider {
   static var previews: some View {
-    SignInView()
+      SignInView(signInAction: { _, _ in }, signUpAction: { _, _ in })
   }
 }
